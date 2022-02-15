@@ -55,6 +55,15 @@ exports.handler = async (event, context) => {
     const nextFlowStep = flowSteps.find(({ id }) => nextFlowStepId === id);
 
     // Send message to subscriber
+    const body = constructMessageFromStep(nextFlowStep.message, nextFlowStep.options)
+
+    await axios.post('https://api.postscript.io/api/v2/message_requests', {
+      body,
+      subscriber_id: subscriberId,
+      category: 'promotional'
+    }, {
+      headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
+    })
 
     return {
       statusCode: 200,
