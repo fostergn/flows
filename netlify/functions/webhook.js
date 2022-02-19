@@ -57,10 +57,10 @@ exports.handler = async (event, context) => {
     const nextFlowStep = flowSteps.find(({ id }) => nextFlowStepId === id);
 
     // Send message to subscriber
-    const body = constructMessageFromStep(nextFlowStep.message, nextFlowStep.options)
+    const newMessageBody = constructMessageFromStep(nextFlowStep.message, nextFlowStep.options)
 
-    await axios.post('https://api.postscript.io/api/v2/message_requests', {
-      body,
+    const result = await axios.post('https://api.postscript.io/api/v2/message_requests', {
+      body: newMessageBody,
       subscriber_id: subscriberId,
       category: 'promotional'
     }, {
@@ -69,7 +69,7 @@ exports.handler = async (event, context) => {
 
     return {
       statusCode: 200,
-      body: JSON.stringify(data),
+      body: JSON.stringify(result),
     };
   } catch (err) {
     console.log(err);
