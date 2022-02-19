@@ -38,26 +38,40 @@ exports.handler = async (event, context) => {
 
     const { POSTSCRIPT_SECRET } = process.env;
 
-    const {
-      data: {
-        properties: { subscriberFlowStep = 1 },
-      },
-    } = await axios.get(
+    console.log('subscriberId: ', subscriberId)
+
+    const data = await axios.get(
       `https://api.postscript.io/api/v2/subscribers/${subscriberId}`,
       {
         headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
       },
     );
 
+    console.log('data: ', data)
+
+    const {
+      data: {
+        properties: { subscriberFlowStep = 1 },
+      },
+    } = data
+
+    console.log('subscriberFlowStep: ', subscriberFlowStep)
+
     // Check if the response includes the number of an option
     const nextFlowStepId = flowSteps[subscriberFlowStep].options.find(
       (option, index) => body.includes(index),
     ).nextStepId;
 
+    console.log('nextFlowStepId: ', nextFlowStepId)
+
     const nextFlowStep = flowSteps.find(({ id }) => nextFlowStepId === id);
+
+    console.log('nextFlowStep: ', nextFlowStep)
 
     // Send message to subscriber
     const newMessageBody = constructMessageFromStep(nextFlowStep.message, nextFlowStep.options)
+
+    console.log('newMessageBody: ', newMessageBody)
 
     const result = await axios.post('https://api.postscript.io/api/v2/message_requests', {
       body: newMessageBody,
@@ -66,6 +80,8 @@ exports.handler = async (event, context) => {
     }, {
       headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
     })
+
+    console.log('result: ', result)
 
     return {
       statusCode: 200,
