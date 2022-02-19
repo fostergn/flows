@@ -34,6 +34,8 @@ exports.handler = async (event, context) => {
       },
     } = JSON.parse(event.body);
 
+    console.log('body: ', body)
+
     const { POSTSCRIPT_SECRET } = process.env;
 
     const {
