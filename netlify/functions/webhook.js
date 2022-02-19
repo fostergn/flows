@@ -51,7 +51,7 @@ exports.handler = async (event, context) => {
 
     const {
       data: {
-        properties: { subscriberFlowStep = 1 },
+        properties: { subscriberFlowStep = 1 } = {},
       },
     } = data
 
