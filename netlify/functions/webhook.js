@@ -112,9 +112,12 @@ exports.handler = async (event, context) => {
     console.log('subscriberFlowStep: ', subscriberFlowStep)
 
     // Check if the response includes the number of an option
-    const nextFlowStepId = flowSteps[subscriberFlowStep].options.find(
+    const flowStep = flowSteps[subscriberFlowStep].options.find(
       (option, index) => body.includes(index),
-    ).nextStepId;
+    );
+
+    // Resend current text if not
+    const nextFlowStepId = flowStep?.nextStepId || flowSteps[subscriberFlowStep].id
 
     console.log('nextFlowStepId: ', nextFlowStepId)
 
