@@ -158,8 +158,6 @@ exports.handler = async (event, context) => {
       console.log('error: ', err)
     }
 
-    console.log('updatedSubscriber: ', updatedSubscriber)
-
     return {
       statusCode: 200,
       body: JSON.stringify(messageResponseData),
@@ -167,7 +165,7 @@ exports.handler = async (event, context) => {
   } catch (err) {
     console.log(err);
 
-    console.log('error: ', err.response.data.errors)
+    console.log('err.response.data.errors: ', err.response.data.errors)
 
     // Send different message to subscriber asking them to retry the step
 
