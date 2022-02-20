@@ -96,11 +96,7 @@ exports.handler = async (event, context) => {
       },
     } = JSON.parse(event.body);
 
-    console.log('body: ', body)
-
     const { POSTSCRIPT_SECRET } = process.env;
-
-    console.log('subscriberId: ', subscriberId)
 
     const { data } = await axios.get(
       `https://api.postscript.io/api/v2/subscribers/${subscriberId}`,
