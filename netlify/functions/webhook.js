@@ -84,6 +84,8 @@ const constructMessageFromStep = (message, options) => `
   ${options.map(({ message }, index) => `${index}. ${message}`)}
 `;
 
+const DEFAULT_KEYWORD = 'GAVINFOSTERSHOPSAVE10'
+
 exports.handler = async (event, context) => {
   try {
     const {
@@ -146,25 +148,20 @@ exports.handler = async (event, context) => {
 
     console.log('messageResponseData: ', messageResponseData)
 
-    try {
-      // Updating subscriber
-      const { data: { errors } } = await axios.put(`https://api.postscript.io/api/v2/subscribers/${subscriberId}`, {
-        phone_number: fromNumber,
-        origin: 'other',
-        properties: {
-          ...data?.properties,
-          subscriberFlowStep: nextFlowStepId
-        }
-      }, {
-        headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
-      })
+    // Updating subscriber
+    const subscriberUpdate = await axios.put(`https://api.postscript.io/api/v2/subscribers/${subscriberId}`, {
+      phone_number: fromNumber,
+      origin: 'other',
+      keyword: DEFAULT_KEYWORD,
+      properties: {
+        ...data?.properties,
+        subscriberFlowStep: nextFlowStepId
+      }
+    }, {
+      headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
+    })
 
-      console.log('errors: ', errors)
-    } catch (err) {
-      console.log('error: ', err)
-
-      console.log('err.response.data.errors: ', err.response.data.errors)
-    }
+    console.log('subscriberUpdate: ', subscriberUpdate)
 
     return {
       statusCode: 200,
