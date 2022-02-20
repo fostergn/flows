@@ -100,12 +100,18 @@ exports.handler = async (event, context) => {
 
     console.log('subscriberId: ', subscriberId)
 
-    const { data } = await axios.get(
+    const subscriber = await axios.get(
       `https://api.postscript.io/api/v2/subscribers/${subscriberId}`,
       {
         headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
       },
     );
+
+    const { data } = subscriber
+
+    console.log('subscriber: ', subscriber)
+
+    console.log('subscriberFlowStep: ', subscriberFlowStep)
 
     const subscriberFlowStep = data?.properties?.subscriberFlowStep || 0
 
