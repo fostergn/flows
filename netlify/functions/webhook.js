@@ -167,6 +167,8 @@ exports.handler = async (event, context) => {
   } catch (err) {
     console.log(err);
 
+    console.log('error: ', err.data.errors)
+
     // Send different message to subscriber asking them to retry the step
 
     return {
