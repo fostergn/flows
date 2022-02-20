@@ -156,6 +156,8 @@ exports.handler = async (event, context) => {
       console.log('errors: ', errors)
     } catch (err) {
       console.log('error: ', err)
+
+      console.log('err.response.data.errors: ', err.response.data.errors)
     }
 
     return {
@@ -163,7 +165,7 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(messageResponseData),
     };
   } catch (err) {
-    console.log(err);
+    // console.log(err);
 
     console.log('err.response.data.errors: ', err.response.data.errors)
 
