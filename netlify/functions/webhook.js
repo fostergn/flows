@@ -145,7 +145,7 @@ exports.handler = async (event, context) => {
     console.log('messageResponseData: ', messageResponseData)
 
     // Updating subscriber
-    const subscriberUpdate = await axios.put(`https://api.postscript.io/api/v2/subscribers/${subscriberId}`, {
+    await axios.put(`https://api.postscript.io/api/v2/subscribers/${subscriberId}`, {
       phone_number: fromNumber,
       origin: 'other',
       keyword: DEFAULT_KEYWORD,
@@ -156,8 +156,6 @@ exports.handler = async (event, context) => {
     }, {
       headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
     })
-
-    console.log('subscriberUpdate: ', subscriberUpdate)
 
     return {
       statusCode: 200,
