@@ -140,17 +140,23 @@ exports.handler = async (event, context) => {
 
     console.log('messageResponseData: ', messageResponseData)
 
-    // Updating subscriber
-    const updatedSubscriber = await axios.put(`https://api.postscript.io/api/v2/subscribers/${subscriberId}`, {
-      phone_number: fromNumber,
-      origin: 'other',
-      properties: {
-        ...data?.properties,
-        subscriberFlowStep: nextFlowStepId
-      }
-    }, {
-      headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
-    })
+    try {
+      // Updating subscriber
+      const { data: { errors } } = await axios.put(`https://api.postscript.io/api/v2/subscribers/${subscriberId}`, {
+        phone_number: fromNumber,
+        origin: 'other',
+        properties: {
+          ...data?.properties,
+          subscriberFlowStep: nextFlowStepId
+        }
+      }, {
+        headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
+      })
+
+      console.log('errors: ', errors)
+    } catch (err) {
+      console.log('error: ', err)
+    }
 
     console.log('updatedSubscriber: ', updatedSubscriber)
 
