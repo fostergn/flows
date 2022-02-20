@@ -100,14 +100,14 @@ exports.handler = async (event, context) => {
 
     console.log('subscriberId: ', subscriberId)
 
-    const { data: { properties } } = await axios.get(
+    const { data } = await axios.get(
       `https://api.postscript.io/api/v2/subscribers/${subscriberId}`,
       {
         headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
       },
     );
 
-    const subscriberFlowStep = properties?.subscriberFlowStep || 0
+    const subscriberFlowStep = data?.properties?.subscriberFlowStep || 0
 
     console.log('subscriberFlowStep: ', subscriberFlowStep)
 
@@ -139,6 +139,19 @@ exports.handler = async (event, context) => {
     })
 
     console.log('messageResponseData: ', messageResponseData)
+
+    // Updating subscriber
+    const updatedSubscriber = await axios.put(`https://api.postscript.io/api/v2/subscribers/${subscriberId}`, {
+      ...data,
+      properties: {
+        ...data?.properties,
+        subscriberFlowStep: nextFlowStepId
+      }
+    }, {
+      headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
+    })
+
+    console.log('updatedSubscriber: ', updatedSubscriber)
 
     return {
       statusCode: 200,
