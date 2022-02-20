@@ -109,30 +109,22 @@ exports.handler = async (event, context) => {
       },
     );
 
-    console.log('data: ', data)
+    const subscriberFlowStepId = data?.properties?.subscriberFlowStepId || 0
 
-    const subscriberFlowStep = data?.properties?.subscriberFlowStep || 0
-
-    console.log('subscriberFlowStep: ', subscriberFlowStep)
+    const currentFlowStep = flowSteps.find(step => step.id === subscriberFlowStepId)
 
     // Check if the response includes the number of an option
-    const flowStep = flowSteps[subscriberFlowStep].options.find(
+    const flowStep = currentFlowStep.options.find(
       (option, index) => body.includes(index),
     );
 
     // Resend current text if not
-    const nextFlowStepId = flowStep?.nextStepId || flowSteps[subscriberFlowStep].id
-
-    console.log('nextFlowStepId: ', nextFlowStepId)
+    const nextFlowStepId = flowStep?.nextStepId || subscriberFlowStepId
 
     const nextFlowStep = flowSteps.find(({ id }) => nextFlowStepId === id);
 
-    console.log('nextFlowStep: ', nextFlowStep)
-
     // Send message to subscriber
     const newMessageBody = constructMessageFromStep(nextFlowStep.message, nextFlowStep.options)
-
-    console.log('newMessageBody: ', newMessageBody)
 
     const { data: messageResponseData } = await axios.post('https://api.postscript.io/api/v2/message_requests', {
       body: newMessageBody,
@@ -141,8 +133,6 @@ exports.handler = async (event, context) => {
     }, {
       headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
     })
-
-    console.log('messageResponseData: ', messageResponseData)
 
     // Updating subscriber
     await axios.put(`https://api.postscript.io/api/v2/subscribers/${subscriberId}`, {
@@ -163,8 +153,6 @@ exports.handler = async (event, context) => {
     };
   } catch (err) {
     console.log(err);
-
-    // Send different message to subscriber asking them to retry the step
 
     return {
       statusCode: 500,
