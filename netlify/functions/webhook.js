@@ -130,7 +130,7 @@ exports.handler = async (event, context) => {
 
     console.log('newMessageBody: ', newMessageBody)
 
-    const result = await axios.post('https://api.postscript.io/api/v2/message_requests', {
+    const { data: messageResponseData } = await axios.post('https://api.postscript.io/api/v2/message_requests', {
       body: newMessageBody,
       subscriber_id: subscriberId,
       category: 'promotional'
@@ -138,11 +138,11 @@ exports.handler = async (event, context) => {
       headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
     })
 
-    console.log('result: ', result)
+    console.log('messageResponseData: ', messageResponseData)
 
     return {
       statusCode: 200,
-      body: JSON.stringify(result),
+      body: JSON.stringify(messageResponseData),
     };
   } catch (err) {
     console.log(err);
