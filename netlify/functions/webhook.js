@@ -16,6 +16,66 @@ const flowSteps = [
       },
     ],
   },
+  {
+    id: 2,
+    message: `Toad!`,
+    options: [
+      {
+        message: 'Leap back to your log',
+        nextStepId: 1,
+      },
+      {
+        message: 'Stay to talk to toad',
+        nextStepId: 4,
+      },
+    ],
+  },
+  {
+    id: 3,
+    message: `Dip: Splish splash I was taking a bathe. You see an army of frogs swimming by.`,
+    options: [
+      {
+        message: 'Dry off on the log',
+        nextStepId: 1,
+      },
+      {
+        message: 'Try to join the group',
+        nextStepId: 5,
+      },
+    ],
+  },
+  {
+    id: 4,
+    message: `Oh no!! Cane toad is now having frog legs for lunch. Your legs!`,
+    options: [
+      {
+        message: 'Try again',
+        nextStepId: 1,
+      }
+    ],
+  },
+  {
+    id: 5,
+    message: `You have fun swimming until you make it to the bank. A fellow frog says he can hook you up half off a shirt. What size are you?`,
+    options: [
+      {
+        message: `S`,
+        nextStepId: 6,
+      },
+      {
+        message: `M`,
+        nextStepId: 6,
+      },
+      {
+        message: `L`,
+        nextStepId: 7,
+      },
+      {
+        message: `XL`,
+        nextStepId: 8,
+      },
+    ],
+  },
 ];
 
 const constructMessageFromStep = (message, options) => `
@@ -47,7 +107,7 @@ exports.handler = async (event, context) => {
       },
     );
 
-    const subscriberFlowStep = properties?.subscriberFlowStep || 1
+    const subscriberFlowStep = properties?.subscriberFlowStep || 0
 
     console.log('subscriberFlowStep: ', subscriberFlowStep)
 
