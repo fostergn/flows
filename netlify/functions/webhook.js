@@ -102,18 +102,14 @@ exports.handler = async (event, context) => {
 
     console.log('subscriberId: ', subscriberId)
 
-    const subscriber = await axios.get(
+    const { data } = await axios.get(
       `https://api.postscript.io/api/v2/subscribers/${subscriberId}`,
       {
         headers: { Authorization: `Bearer ${POSTSCRIPT_SECRET}` },
       },
     );
 
-    const { data } = subscriber
-
-    console.log('subscriber: ', subscriber)
-
-    console.log('subscriberFlowStep: ', subscriberFlowStep)
+    console.log('data: ', data)
 
     const subscriberFlowStep = data?.properties?.subscriberFlowStep || 0
 
@@ -168,9 +164,7 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(messageResponseData),
     };
   } catch (err) {
-    // console.log(err);
-
-    console.log('err.response.data.errors: ', err.response.data.errors)
+    console.log(err);
 
     // Send different message to subscriber asking them to retry the step
 
