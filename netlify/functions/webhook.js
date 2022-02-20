@@ -142,7 +142,8 @@ exports.handler = async (event, context) => {
 
     // Updating subscriber
     const updatedSubscriber = await axios.put(`https://api.postscript.io/api/v2/subscribers/${subscriberId}`, {
-      ...data,
+      phone_number: fromNumber,
+      origin: 'other',
       properties: {
         ...data?.properties,
         subscriberFlowStep: nextFlowStepId
